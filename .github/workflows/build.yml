@@ -1,0 +1,23 @@
+name: build
+on: [push, workflow_dispatch]
+jobs:
+  build:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - run: unzip narutomod-project.zip
+      - uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: temurin
+      - uses: gradle/actions/setup-gradle@v3
+        with:
+          gradle-version: '8.5'
+      - run: gradle build
+        working-directory: narutomod
+      - uses: actions/upload-artifact@v4
+        with:
+          name: narutomod
+          path: |
+            narutomod/build/libs/*.jar
+            !narutomod/build/libs/*-sources.jar
